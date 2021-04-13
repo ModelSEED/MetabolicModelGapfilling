@@ -22,6 +22,7 @@ class BaseModule:
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
             level=logging.INFO)
         self.clear_context()
+        self.report_html = None
     
     def validate_args(self,params,required,defaults):
         for item in required:
@@ -68,7 +69,8 @@ class BaseModule:
         os.makedirs(html_report_folder, exist_ok=True)
         
         with open(os.path.join(html_report_folder, 'view.html'), 'w') as f:
-            f.write(self.build_report(context,template_file))
+            self.report_html = self.build_report(context,template_file)
+            f.write(self.report_html)
 
         report_shock_id = ""
         if self.config["save_report_to_kbase"] == 1:
@@ -89,6 +91,7 @@ class BaseModule:
         if self.config["save_report_to_kbase"] == 1:
             report = KBaseReport(self.callback_url, token=self.ctx['token'])
             self.report_info = report.create_extended_report(report_params)
+        return self.report_html
         
     def build_report(self,context,template_file=None):
         if template_file == None:
