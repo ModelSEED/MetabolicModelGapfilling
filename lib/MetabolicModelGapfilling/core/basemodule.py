@@ -100,8 +100,6 @@ class BaseModule:
         array = template_file.split("/")
         filename = array.pop()
         template_dir = "/".join(array)
-        print("Filename:"+filename)
-        print("Directory:"+template_dir)
         env = jinja2.Environment(
                 loader=jinja2.FileSystemLoader(template_dir),
                 autoescape=jinja2.select_autoescape(['html', 'xml']))

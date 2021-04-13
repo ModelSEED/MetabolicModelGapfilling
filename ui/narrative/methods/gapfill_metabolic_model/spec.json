@@ -13,8 +13,13 @@
                "target_type_transform": "resolved-ref"
             },
             {
-               "input_parameter" : "media_id",
-               "target_property" : "media_id",
+               "input_parameter" : "media_ids",
+               "target_property" : "media_ids",
+               "target_type_transform": "resolved-ref"
+            },
+            {
+               "input_parameter" : "nogrow_media_ids",
+               "target_property" : "nogrow_media_ids",
                "target_type_transform": "resolved-ref"
             },
             {
@@ -36,10 +41,6 @@
             {
                "target_property" : "reaction_ko_list",
                "input_parameter" : "reaction_ko_list"
-            },
-            {
-               "input_parameter" : "custom_bound_list",
-               "target_property" : "custom_bound_list"
             },
             {
                "input_parameter" : "media_supplement_list",
@@ -77,11 +78,11 @@
                "input_parameter" : "fbamodel_output_id"
             }
          ],
-         "name" : "fba_tools"
+         "name" : "MetabolicModelGapfilling"
       }
    },
    "authors" : [
-      "chenry"
+      "chenry","filipeliu"
    ],
    "categories" : [
       "active",
@@ -112,14 +113,29 @@
          "allow_multiple" : false
       },
       {
-         "allow_multiple" : false,
+         "allow_multiple" : true,
          "optional" : true,
          "field_type" : "text",
          "advanced" : false,
          "default_values" : [
             ""
          ],
-         "id" : "media_id",
+         "id" : "media_ids",
+         "text_options" : {
+            "valid_ws_types" : [
+               "KBaseBiochem.Media"
+            ]
+         }
+      },
+      {
+         "allow_multiple" : true,
+         "optional" : true,
+         "field_type" : "text",
+         "advanced" : false,
+         "default_values" : [
+            ""
+         ],
+         "id" : "nogrow_media_ids",
          "text_options" : {
             "valid_ws_types" : [
                "KBaseBiochem.Media"

@@ -58,15 +58,22 @@ parameters :
             The metabolic model consisting of a genome-wide set of stoichiometric reactions, compounds, and weighted components of the biomass needed for flux balance analysis (FBA).
 
 
-    media_id :
+    media_ids :
         ui-name : |
-            Media (defaults to Complete media)
+            Media IDs (defaults to Complete media)
         short-hint : |
-            Media specifies the set of chemical compounds the organism can use for its growth. In this function, the media is used as the growth condition for gapfilling, if gapfilling is performed. If none is specified, Complete media is used. The “Complete” media is an abstraction of what’s available in our biochemistry database. Every compound that can be transported into the extracellular compartment–or, in other words, for which a transport reaction is available–is used in the complete media. This list is built in real-time, meaning that whenever you run FBA with complete media, the available transporters are parsed from the media database–and is therefore not stored permanently in any media object in the workspace.
+            Media specifies the set of chemical compounds the organism can use for its growth. In this function, this list of media IDs is used as a set of growth conditions for gapfilling, if gapfilling is performed. If none is specified, Complete media is used. The “Complete” media is an abstraction of what’s available in our biochemistry database. Every compound that can be transported into the extracellular compartment–or, in other words, for which a transport reaction is available–is used in the complete media. This list is built in real-time, meaning that whenever you run FBA with complete media, the available transporters are parsed from the media database–and is therefore not stored permanently in any media object in the workspace.
         placeholder : |
-            Growth condition for gapfilling
+            Growth conditions for gapfilling
 
-
+    nogrow_media_ids :
+        ui-name : |
+            Negative medias (defaults to none)
+        short-hint : |
+            Media specifies the set of chemical compounds the organism can use for its growth. In this function, this list of negative media IDs is used to reject gapfilling solutions that cause growth in one or more of these conditions. If none are specified, the first gapfilling solution is accepted.
+        placeholder : |
+            Conditions where growth should not occur
+    
     feature_ko_list :
         ui-name : |
             Gene Knockouts

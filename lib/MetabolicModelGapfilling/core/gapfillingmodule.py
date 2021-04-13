@@ -140,15 +140,15 @@ class GapfillingModule(BaseModule):
                         gfdata["reversed"][rxn] = gfresults["reversed"][rxn]
                 wsname = params["workspace"]
                 fba_obj = self.build_fba(params["fbamodel_output_id"]+"."+media+".gf",model,flux_values,wsname+"/"+params["fbamodel_id"],wsname+"/"+media,params["target_reaction"])
-                with open('/Users/chenry/output.json', 'w') as outfile:
-                    json.dump(fba_obj, outfile, indent=2)
-                kbase_api.save_object(params["fbamodel_output_id"]+"."+media+".gf", wsname,"KBaseFBA.FBA", fba_obj)
-                self.add_created_object(wsname+"/"+params["fbamodel_output_id"]+"."+media+".gf","Gapfilled FBA in "+media)
+                if self.config["save_output_to_kbase"] == 1:
+                    kbase_api.save_object(params["fbamodel_output_id"]+"."+media+".gf", wsname,"KBaseFBA.FBA", fba_obj)
+                    self.add_created_object(wsname+"/"+params["fbamodel_output_id"]+"."+media+".gf","Gapfilled FBA in "+media)
         #Adding gapfilled reactions to KBase model
         rxn_tbl = self.add_gapfilling_solution_to_kbase_model(model,kbmodel,gfdata,wsname+"/"+media,reaction_genes)
         #Saving gapfilled model
-        kbase_api.save_object(params["fbamodel_output_id"], params["workspace"],"KBaseFBA.FBAModel", kbmodel)
-        self.add_created_object(wsname+"/"+params["fbamodel_output_id"],"Gapfilled model")
+        if self.config["save_output_to_kbase"] == 1:
+            kbase_api.save_object(params["fbamodel_output_id"], params["workspace"],"KBaseFBA.FBAModel", kbmodel)
+            self.add_created_object(wsname+"/"+params["fbamodel_output_id"],"Gapfilled model")
         gfdata = {
             'gapfilling_summary':"Model successfully gapfilled in "+str(media_count)+" media, adding "+str(len(gfdata["new"]))+" reactions and making "+str(len(gfdata["reversed"]))+" reactions reversible.",
             'reaction_tab': {
@@ -159,9 +159,7 @@ class GapfillingModule(BaseModule):
         }
         self.create_report(gfdata)
         output = {}
-        output = self.finalize_call(output)
-        print(json.dumps(output))
-        return output
+        return self.finalize_call(output)
     
     def compute_reaction_scores(self,genome_ref,weigh_all_events_equally = 1,weights = None):
         reaction_genes = {}
@@ -170,25 +168,24 @@ class GapfillingModule(BaseModule):
             "input_ref" : genome_ref,
         })
         events = output["events"]
-        #with open('/Users/chenry/output.json', 'w') as outfile:
-        #    json.dump(events, outfile, indent=2)
         for event in events:
             for gene in event["ontology_terms"]:
-                if "modelseed_ids" in event["ontology_terms"][gene]:
-                    for rxn in event["ontology_terms"][gene]["modelseed_ids"]:
-                        newrxn = re.sub("^MSRXN:","",rxn)
-                        if newrxn not in reaction_genes:
-                            reaction_genes[newrxn] = {}
-                        if gene not in reaction_genes[newrxn]:
-                            reaction_genes[newrxn][gene] = 0            
-                        if weigh_all_events_equally == 1 or weights == None:
-                            reaction_genes[newrxn][gene] += 1
-                        elif event["description"] in weights:
-                            reaction_genes[newrxn][gene] += weights[event["description"]]
-                        elif event["event_id"] in weights:
-                            reaction_genes[newrxn][gene] += weights[event["event_id"]]
-                        elif event["id"] in weights:
-                            reaction_genes[newrxn][gene] += weights[event["id"]]
+                for term in event["ontology_terms"][gene]:
+                    if "modelseed_ids" in term:
+                        for rxn in term["modelseed_ids"]:
+                            newrxn = re.sub("^MSRXN:","",rxn)
+                            if newrxn not in reaction_genes:
+                                reaction_genes[newrxn] = {}
+                            if gene not in reaction_genes[newrxn]:
+                                reaction_genes[newrxn][gene] = 0            
+                            if weigh_all_events_equally == 1 or weights == None:
+                                reaction_genes[newrxn][gene] += 1
+                            elif event["description"] in weights:
+                                reaction_genes[newrxn][gene] += weights[event["description"]]
+                            elif event["event_id"] in weights:
+                                reaction_genes[newrxn][gene] += weights[event["event_id"]]
+                            elif event["id"] in weights:
+                                reaction_genes[newrxn][gene] += weights[event["id"]]
         return reaction_genes
     
     def build_fba(self,fba_id,model,flux_values,model_ref,media_ref,target_rxn):
