@@ -93,6 +93,7 @@ class GapfillingModule(BaseModule):
             "gapfilling_annotation_sources" : [],
             "consecutive_gapfill" : 1
         })
+        print("Config:"+json.dumps(self.config))
         if len(params["media_ids"]) == 0:
             params["media_ids"] = ["Complete"]
         self.initialize_call(ctx,params["workspace"],"KBaseFBA.FBAModel",params["fbamodel_output_id"])
@@ -156,13 +157,13 @@ class GapfillingModule(BaseModule):
                         gfdata["reversed"][rxn] = gfresults["reversed"][rxn]
                 wsname = params["workspace"]
                 fba_obj = self.build_fba(params["fbamodel_output_id"]+"."+media+".gf",model,flux_values,modelref,mediaref,params["target_reaction"])
-                if self.config["save_output_to_kbase"] == 1:
+                if self.config["save_output_to_kbase"] == "1":
                     kbase_api.save_object(params["fbamodel_output_id"]+"."+media+".gf", wsname,"KBaseFBA.FBA", fba_obj)
                     self.add_created_object(wsname+"/"+params["fbamodel_output_id"]+"."+media+".gf","Gapfilled FBA in "+media)
         #Adding gapfilled reactions to KBase model
         rxn_tbl = self.add_gapfilling_solution_to_kbase_model(model,kbmodel,gfdata,wsname+"/"+media,reaction_genes)
         #Saving gapfilled model
-        if self.config["save_output_to_kbase"] == 1:
+        if self.config["save_output_to_kbase"] == "1":
             kbase_api.save_object(params["fbamodel_output_id"], params["workspace"],"KBaseFBA.FBAModel", kbmodel)
             self.add_created_object(wsname+"/"+params["fbamodel_output_id"],"Gapfilled model")
         gfdata = {

@@ -73,7 +73,7 @@ class BaseModule:
             f.write(self.report_html)
 
         report_shock_id = ""
-        if self.config["save_report_to_kbase"] == 1:
+        if self.config["save_report_to_kbase"] == "1":
             report_shock_id = self.dfu.file_to_shock({'file_path': html_report_folder,'pack': 'zip'})['shock_id']
 
         html_output = {
@@ -88,7 +88,7 @@ class BaseModule:
             'html_window_height': height,
             'report_object_name': self.name + '_report_' + str(uuid.uuid4())
         }
-        if self.config["save_report_to_kbase"] == 1:
+        if self.config["save_report_to_kbase"] == "1":
             report = KBaseReport(self.callback_url, token=self.ctx['token'])
             self.report_info = report.create_extended_report(report_params)
         return self.report_html
