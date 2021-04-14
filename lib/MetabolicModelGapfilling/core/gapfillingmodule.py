@@ -138,7 +138,7 @@ class GapfillingModule(BaseModule):
                         mediaws = None
                         mediaref = media
                     media_obj = kbase_api.get_from_ws(media,mediaws)
-                    media = media_obj.info.id()
+                    media = media_obj.info.id
                     utilities.apply_media_to_model(media_obj,0,100)
                 #Minimizing gapfilled reactions
                 gapfilling_solution = model.optimize()
