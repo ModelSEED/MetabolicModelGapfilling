@@ -14,7 +14,8 @@ MAINTAINER Christopher Henry
 RUN pip install --upgrade pip
 
 # update security libraries in the base image
-RUN pip install cffi --upgrade \
+RUN pip install ConfigParser --upgrade \
+	&& pip install cffi --upgrade \
     && pip install pyopenssl --upgrade \
     && pip install ndg-httpsclient --upgrade \
     && pip install pyasn1 --upgrade \
