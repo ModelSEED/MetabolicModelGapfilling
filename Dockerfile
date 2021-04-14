@@ -1,4 +1,4 @@
-FROM kbase/sdkbase2:python
+FROM kbase/kbase:sdkbase.latest
 MAINTAINER Christopher Henry
 # -----------------------------------------
 # In this section, you can install any system dependencies required
@@ -19,8 +19,8 @@ RUN pip install cffi --upgrade \
     && pip install ndg-httpsclient --upgrade \
     && pip install pyasn1 --upgrade \
     && pip install requests --upgrade \
-    && pip install 'requests[security]' --upgrade
-	pip install --upgrade pyopenssl ndg-httpsclient && \
+    && pip install 'requests[security]' --upgrade \
+	&& pip install --upgrade pyopenssl ndg-httpsclient && \
     pip install --upgrade pyasn1 requests 'requests[security]' && \
     pip install coverage networkx cython && \
     pip install --upgrade pip setuptools wheel cffi
