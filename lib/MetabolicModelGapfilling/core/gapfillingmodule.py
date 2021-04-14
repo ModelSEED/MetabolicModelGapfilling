@@ -99,11 +99,19 @@ class GapfillingModule(BaseModule):
         
         kbase_api = cobrakbase.KBaseAPI(token=ctx["token"])
         kbase_api.ws_client = self.wsclient
-        kbmodel = kbase_api.get_object(params["fbamodel_id"],params["fbamodel_workspace"])
-        model = kbase_api.get_from_ws(params["fbamodel_id"],params["fbamodel_workspace"])
+        modelref = params["fbamodel_workspace"]+"/"+params["fbamodel_id"]
+        modelws = params["fbamodel_workspace"]
+        if re.search("/",params["fbamodel_id"]):
+            modelref = params["fbamodel_id"]
+            modelws = None
+        kbmodel = kbase_api.get_object(params["fbamodel_id"],modelws)
+        model = kbase_api.get_from_ws(params["fbamodel_id"],modelws)
         src_models = []
         if params["source_fbamodel_id"] != None:
-            src_models.append(kbase_api.get_from_ws(params["source_fbamodel_id"],params["fbamodel_workspace"])) 
+            modelws = params["source_fbamodel_workspace"]
+            if re.search("/",params["source_fbamodel_id"]):
+                modelws = None
+            src_models.append(kbase_api.get_from_ws(params["source_fbamodel_id"],modelws)) 
         utilities = KBaseFBAUtilities(model,model,kbase_api,None,0,100,[])
         #Setting objective function
         utilities.set_objective_from_target_reaction(params["target_reaction"],params["max"])
@@ -119,11 +127,17 @@ class GapfillingModule(BaseModule):
         media_count = 0
         if params["consecutive_gapfill"] == 1:
             for media in params["media_ids"]:
+                mediaref = params["media_workspace"]+"/"+media
                 media_count += 1
                 if media == "Complete":
+                    mediaref = "KBaseMedia/Complete"
                     utilities.apply_media_to_model(None,100,100)
                 else:
-                    media_obj = kbase_api.get_from_ws(media,params["media_workspace"])
+                    mediaws = params["media_workspace"]
+                    if re.search("/",media):
+                        mediaws = None
+                        mediaref = media
+                    media_obj = kbase_api.get_from_ws(media,mediaws)
                     utilities.apply_media_to_model(media_obj,0,100)
                 #Minimizing gapfilled reactions
                 gapfilling_solution = model.optimize()
@@ -141,7 +155,7 @@ class GapfillingModule(BaseModule):
                     if rxn not in gfdata["reversed"]:
                         gfdata["reversed"][rxn] = gfresults["reversed"][rxn]
                 wsname = params["workspace"]
-                fba_obj = self.build_fba(params["fbamodel_output_id"]+"."+media+".gf",model,flux_values,wsname+"/"+params["fbamodel_id"],wsname+"/"+media,params["target_reaction"])
+                fba_obj = self.build_fba(params["fbamodel_output_id"]+"."+media+".gf",model,flux_values,modelref,mediaref,params["target_reaction"])
                 if self.config["save_output_to_kbase"] == 1:
                     kbase_api.save_object(params["fbamodel_output_id"]+"."+media+".gf", wsname,"KBaseFBA.FBA", fba_obj)
                     self.add_created_object(wsname+"/"+params["fbamodel_output_id"]+"."+media+".gf","Gapfilled FBA in "+media)
