@@ -1,4 +1,4 @@
-FROM kbase/kbase:sdkbase.latest
+FROM kbase/sdkbase2:python
 MAINTAINER Christopher Henry
 # -----------------------------------------
 # In this section, you can install any system dependencies required
@@ -10,9 +10,6 @@ MAINTAINER Christopher Henry
 
 # Here we install a python coverage tool and an
 # https library that is out of date in the base image.
-
-RUN pip install --upgrade pip
-RUN pip install coverage
 
 # update security libraries in the base image
 RUN pip install cffi --upgrade \
