@@ -11,7 +11,7 @@ from jsonrpcbase import JSONRPCService, InvalidParamsError, KeywordError,\
     JSONRPCError, InvalidRequestError
 from jsonrpcbase import ServerError as JSONServerError
 from os import environ
-from ConfigParser import ConfigParser
+from configparser import configparser
 from biokbase import log
 import requests as _requests
 import random as _random
@@ -37,7 +37,7 @@ def get_config():
     if not get_config_file():
         return None
     retconfig = {}
-    config = ConfigParser()
+    config = configparser()
     config.read(get_config_file())
     for nameval in config.items(get_service_name() or 'MetabolicModelGapfilling'):
         retconfig[nameval[0]] = nameval[1]

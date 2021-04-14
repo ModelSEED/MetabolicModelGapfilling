@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//lib/MetabolicModelGapfilling/MetabolicModelGapfillingImpl.py=utf-8
+encoding//lib/MetabolicModelGapfilling/MetabolicModelGapfillingServer.py=utf-8
 encoding//lib/MetabolicModelGapfilling/__init__.py=utf-8
 encoding//lib/MetabolicModelGapfilling/core/__init__.py=utf-8
 encoding//lib/MetabolicModelGapfilling/core/basemodule.py=utf-8
