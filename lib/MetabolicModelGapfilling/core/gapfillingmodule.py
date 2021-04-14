@@ -95,7 +95,7 @@ class GapfillingModule(BaseModule):
         })
         self.initialize_call(ctx,params["workspace"],"KBaseFBA.FBAModel",params["fbamodel_output_id"])
         
-        kbase_api = cobrakbase.KBaseAPI()
+        kbase_api = cobrakbase.KBaseAPI(token=ctx["token"])
         kbase_api.ws_client = self.wsclient
         kbmodel = kbase_api.get_object(params["fbamodel_id"],params["fbamodel_workspace"])
         model = kbase_api.get_from_ws(params["fbamodel_id"],params["fbamodel_workspace"])
