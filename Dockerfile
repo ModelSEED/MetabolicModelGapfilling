@@ -11,6 +11,8 @@ MAINTAINER Christopher Henry
 # Here we install a python coverage tool and an
 # https library that is out of date in the base image.
 
+RUN pip install --upgrade pip
+
 # update security libraries in the base image
 RUN pip install cffi --upgrade \
     && pip install pyopenssl --upgrade \
