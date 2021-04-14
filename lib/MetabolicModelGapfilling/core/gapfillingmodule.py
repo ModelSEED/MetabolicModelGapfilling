@@ -93,6 +93,8 @@ class GapfillingModule(BaseModule):
             "gapfilling_annotation_sources" : [],
             "consecutive_gapfill" : 1
         })
+        if len(params["media_ids"]) == 0:
+            params["media_ids"] = ["Complete"]
         self.initialize_call(ctx,params["workspace"],"KBaseFBA.FBAModel",params["fbamodel_output_id"])
         
         kbase_api = cobrakbase.KBaseAPI(token=ctx["token"])
