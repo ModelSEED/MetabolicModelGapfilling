@@ -139,6 +139,7 @@ class GapfillingModule(BaseModule):
                         mediaws = None
                         mediaref = media
                     media_obj = kbase_api.get_from_ws(media,mediaws)
+                    media = media_obj.info[1]
                     utilities.apply_media_to_model(media_obj,0,100)
                 #Minimizing gapfilled reactions
                 gapfilling_solution = model.optimize()
@@ -161,7 +162,7 @@ class GapfillingModule(BaseModule):
                     kbase_api.save_object(params["fbamodel_output_id"]+"."+media+".gf", wsname,"KBaseFBA.FBA", fba_obj)
                     self.add_created_object(wsname+"/"+params["fbamodel_output_id"]+"."+media+".gf","Gapfilled FBA in "+media)
         #Adding gapfilled reactions to KBase model
-        rxn_tbl = self.add_gapfilling_solution_to_kbase_model(model,kbmodel,gfdata,wsname+"/"+media,reaction_genes)
+        rxn_tbl = self.add_gapfilling_solution_to_kbase_model(model,kbmodel,gfdata,mediaref,reaction_genes)
         #Saving gapfilled model
         if self.config["save_output_to_kbase"] == "1":
             kbase_api.save_object(params["fbamodel_output_id"], params["workspace"],"KBaseFBA.FBAModel", kbmodel)
