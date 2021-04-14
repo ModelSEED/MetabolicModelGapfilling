@@ -93,7 +93,6 @@ class GapfillingModule(BaseModule):
             "gapfilling_annotation_sources" : [],
             "consecutive_gapfill" : 1
         })
-        print("Config:"+json.dumps(self.config))
         if len(params["media_ids"]) == 0:
             params["media_ids"] = ["Complete"]
         self.initialize_call(ctx,params["workspace"],"KBaseFBA.FBAModel",params["fbamodel_output_id"])
@@ -139,7 +138,7 @@ class GapfillingModule(BaseModule):
                         mediaws = None
                         mediaref = media
                     media_obj = kbase_api.get_from_ws(media,mediaws)
-                    media = media_obj.info[1]
+                    media = media_obj.info.id()
                     utilities.apply_media_to_model(media_obj,0,100)
                 #Minimizing gapfilled reactions
                 gapfilling_solution = model.optimize()
