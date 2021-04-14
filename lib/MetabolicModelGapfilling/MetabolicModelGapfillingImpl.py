@@ -30,7 +30,7 @@ class MetabolicModelGapfilling:
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
-        self.module = GapfilingModule(config)
+        self.module = GapfillingModule(config)
         #END_CONSTRUCTOR
         pass
 
