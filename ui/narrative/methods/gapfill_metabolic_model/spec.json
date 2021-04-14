@@ -9,15 +9,15 @@
             },
             {
                "target_property" : "fbamodel_id",
-               "input_parameter" : "fbamodel_id",
+               "input_parameter" : "fbamodel_id"
             },
             {
                "input_parameter" : "media_ids",
-               "target_property" : "media_ids",
+               "target_property" : "media_ids"
             },
             {
                "input_parameter" : "nogrow_media_ids",
-               "target_property" : "nogrow_media_ids",
+               "target_property" : "nogrow_media_ids"
             },
             {
                "input_parameter" : "target_reaction",
