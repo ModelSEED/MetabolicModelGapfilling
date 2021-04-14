@@ -11,6 +11,7 @@ MAINTAINER Christopher Henry
 # Here we install a python coverage tool and an
 # https library that is out of date in the base image.
 
+RUN python -m pip install –upgrade pip
 RUN pip install coverage
 
 # update security libraries in the base image
