@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
-from cobrakbase.core.gapfillingmodule import GapfilingModule
+from MetabolicModelGapfilling.core.gapfillingmodule import GapfillingModule
 #END_HEADER
 
 
